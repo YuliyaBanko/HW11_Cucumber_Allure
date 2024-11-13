@@ -34,7 +34,7 @@ describe("user can create a box and run it", () => {
     cy.get(dashboardPage.createdBoxName).should("have.text", newBoxName);
 
     cy.url().then((url) => {
-      boxKey = url.split('/').pop(); // Получаем последний сегмент URL, который является ключом
+      boxKey = url.split('/').pop(); 
       cy.log("Box Key:", boxKey);
     });
   });
