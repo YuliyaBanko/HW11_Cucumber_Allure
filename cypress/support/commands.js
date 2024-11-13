@@ -28,6 +28,9 @@ const loginPage = require("../fixtures/pages/loginPage.json");
 const generalElements = require("../fixtures/pages/general.json");
 import inviteeBoxPage from "../fixtures/pages/inviteeBoxPage.json";
 import inviteeDashboardPage from "../fixtures/pages/inviteeDashboardPage.json";
+import boxPage from '../fixtures/pages/boxPage.json';
+
+
 
 Cypress.Commands.add("login", (userName, password) => {
   cy.get(loginPage.loginField).type(userName);
@@ -52,5 +55,33 @@ Cypress.Commands.add("addParticipant", (inviteLink, email, password, wishes) => 
       expect(text).to.contain("Это — анонимный чат с вашим Тайным Сантой");
     });
   cy.clearCookies();
+});
+
+Cypress.Commands.add('createBox', (boxName, minAmount, maxAmount, currency) => {
+  cy.get(boxPage.boxNameField).type(boxName);
+  cy.get(generalElements.arrowRight).click();
+  cy.get(boxPage.sixthIcon).click();
+  cy.get(generalElements.arrowRight).click();
+  cy.get(boxPage.giftPriceToggle).click({ force: true });
+  cy.get(boxPage.minAmount).type(minAmount);
+  cy.get(boxPage.maxAmount).type(maxAmount);
+  cy.get(boxPage.currency).select(currency);
+  cy.get(generalElements.arrowRight).click({ force: true });
+  cy.get(generalElements.arrowRight).click({ force: true });
+  cy.get(generalElements.arrowRight).click({ force: true });
+});
+
+Cypress.Commands.add('organizeRaffle', (boxName) => {
+  cy.contains('Коробки').click({ force: true });
+  cy.contains(boxName).click();
+  cy.contains('Перейти к жеребьевке').click({ force: true });
+  cy.contains('Провести жеребьевку').click({ force: true });
+  cy.contains('Да, провести жеребьевку').click({ force: true });
+  cy.get('.picture-notice__title').should('exist');
+});
+
+Cypress.Commands.add('loginAsUser', (user) => {
+  cy.visit("/login"); 
+  cy.login(user.email, user.password);
 });
 
