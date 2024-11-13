@@ -62,7 +62,16 @@ describe("user can create a box and run it", () => {
   it("approve as user3", () => {
     cy.addParticipant(inviteLink, users.user3.email, users.user3.password, wishes);
   });
-
+it("organizing raffle", () => {
+  cy.visit("/login");
+  cy.login(users.userAutor.email, users.userAutor.password);
+  cy.contains('Коробки').click({ force: true });
+  cy.contains(newBoxName).click();
+  cy.contains('Перейти к жеребьевке').click({ force: true });
+  cy.contains('Провести жеребьевку').click({ force: true });
+  cy.contains('Да, провести жеребьевку').click({ force: true });
+  cy.get('.picture-notice__title').should('exist');
+});
   after("delete box", () => {
     cy.visit("/login");
     cy.login(users.userAutor.email, users.userAutor.password);
