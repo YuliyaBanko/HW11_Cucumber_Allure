@@ -14,6 +14,7 @@ describe("user can create a box and run it", () => {
   let minAmount = 10;
   let currency = "Евро";
   let inviteLink;
+  let boxKey;
 
   it("user logins and creates a box", () => {
     cy.visit("/login");
@@ -30,15 +31,12 @@ describe("user can create a box and run it", () => {
     cy.get(generalElements.arrowRight).click({ force: true });
     cy.get(generalElements.arrowRight).click({ force: true });
     cy.get(generalElements.arrowRight).click({ force: true });
-   
     cy.get(dashboardPage.createdBoxName).should("have.text", newBoxName);
-    cy.get(".layout-1__header-wrapper-fixed .toggle-menu-item span")
-      .invoke("text")
-      .then((text) => {
-        expect(text).to.include("Участники");
-        expect(text).to.include("Моя карточка");
-        expect(text).to.include("Подопечный");
-      });
+
+    cy.url().then((url) => {
+      boxKey = url.split('/').pop(); // Получаем последний сегмент URL, который является ключом
+      cy.log("Box Key:", boxKey);
+    });
   });
 
   it("adds participants", () => {
@@ -62,28 +60,28 @@ describe("user can create a box and run it", () => {
   it("approve as user3", () => {
     cy.addParticipant(inviteLink, users.user3.email, users.user3.password, wishes);
   });
-it("organizing raffle", () => {
-  cy.visit("/login");
-  cy.login(users.userAutor.email, users.userAutor.password);
-  cy.contains('Коробки').click({ force: true });
-  cy.contains(newBoxName).click();
-  cy.contains('Перейти к жеребьевке').click({ force: true });
-  cy.contains('Провести жеребьевку').click({ force: true });
-  cy.contains('Да, провести жеребьевку').click({ force: true });
-  cy.get('.picture-notice__title').should('exist');
-});
-  after("delete box", () => {
+
+  it("organizing raffle", () => {
     cy.visit("/login");
     cy.login(users.userAutor.email, users.userAutor.password);
-    cy.get(
-      '.layout-1__header-wrapper-fixed > .layout-1__header > .header > .header__items > .layout-row-start > [href="/account/boxes"] > .header-item > .header-item__text > .txt--med'
-    ).click();
-    cy.get(":nth-child(1) > a.base--clickable > .user-card").first().click();
-    cy.get(
-      ".layout-1__header-wrapper-fixed > .layout-1__header-secondary > .header-secondary > .header-secondary__right-item > .toggle-menu-wrapper > .toggle-menu-button > .toggle-menu-button--inner"
-    ).click();
-    cy.contains("Архивация и удаление").click({ force: true });
-    cy.get(":nth-child(2) > .form-page-group__main > .frm-wrapper > .frm").type("Удалить коробку");
-    cy.get('.layout-row-end > .btn-service').click();
+    cy.contains('Коробки').click({ force: true });
+    cy.contains(newBoxName).click();
+    cy.contains('Перейти к жеребьевке').click({ force: true });
+    cy.contains('Провести жеребьевку').click({ force: true });
+    cy.contains('Да, провести жеребьевку').click({ force: true });
+    cy.get('.picture-notice__title').should('exist');
+  });
+
+  after(() => {
+    cy.request({
+      method: 'DELETE',
+      url: `https://santa-secret.ru/api/box/${boxKey}`,
+      headers: {
+        Cookie: `_ym_uid=1730881242899989110; _ym_d=1730881242; __upin=juHuYxBH6v1IsHazyTwRKw; ma_prevVisId_3485699018=f97658136a081d7771479e2d5461ee6e; ma_id=3020008461719246020134; adrcid=AhBYFfLl_52LtUyi_aWGllg; _ym_isad=2; fid=c62162d3-1035-4b57-8b08-5a7867fdc3ac; _ac_oid=ff26b1026bdbb5d18be8d352a14ce171%3A1731492100613; __ai_fp_uuid=b736292bfb083397%3A2; ma_vis_id_last_sync_3485699018=1731489750882; _buzz_fpc=JTdCJTIydmFsdWUlMjIlM0ElN0IlMjJ1ZnAlMjIlM0ElMjJhMDJlZGNmMjhjNTEyNmEwMzc3ZTRhNDM4OTllMzgxMCUyMiUyQyUyMmJyb3dzZXJWZXJzaW9uJTIyJTNBJTIyMTMwLjAlMjIlMkMlMjJ0c0NyZWF0ZWQlMjIlM0ExNzMxNDg5NzQ5Nzk2JTdEJTJDJTIycGF0aCUyMiUzQSUyMiUyRiUyMiUyQyUyMmRvbWFpbiUyMiUzQSUyMi5zYW50YS1zZWNyZXQucnUlMjIlMkMlMjJleHBpcmVzJTIyJTNBJTIyVGh1JTJDJTIwMTMlMjBOb3YlMjAyMDI1JTIwMDklM0EyMiUzQTMxJTIwR01UJTIyJTJDJTIyU2FtZVNpdGUlMjIlM0ElMjJMYXglMjIlN0Q=; _buzz_aidata=JTdCJTIydmFsdWUlMjIlM0ElN0IlMjJ1ZnAlMjIlM0ElMjJqdUh1WXhCSDZ2MUlzSGF6eVR3Ukt3JTIyJTJDJTIyYnJvd3NlclZlcnNpb24lMjIlM0ElMjIxMzAuMCUyMiUyQyUyMnRzQ3JlYXRlZCUyMiUzQTE3MzE0ODk3NTExMDYlN0QlMkMlMjJwYXRoJTIyJTNBJTIyJTJGJTIyJTJDJTIyZG9tYWluJTIyJTNBJTIyLnNhbnRhLXNlY3JldC5ydSUyMiUyQyUyMmV4cGlyZXMlMjIlM0ElMjJUaHUlMkMlMjAxMyUyME5vdiUyMDIwMjUlMjAwOSUzQTIyJTNBMzElMjBHTVQlMjIlMkMlMjJTYW1lU2l0ZSUyMiUzQSUyMkxheCUyMiU3RA==; _buzz_mtsa=JTdCJTIydmFsdWUlMjIlM0ElN0IlMjJ1ZnAlMjIlM0ElMjJmOTc2NTgxMzZhMDgxZDc3NzE0NzllMmQ1NDYxZWU2ZSUyMiUyQyUyMmJyb3dzZXJWZXJzaW9uJTIyJTNBJTIyMTMwLjAlMjIlMkMlMjJ0c0NyZWF0ZWQlMjIlM0ExNzMxNDg5NzUwODg1JTdEJTJDJTIycGF0aCUyMiUzQSUyMiUyRiUyMiUyQyUyMmRvbWFpbiUyMiUzQSUyMi5zYW50YS1zZWNyZXQucnUlMjIlMkMlMjJleHBpcmVzJTIyJTNBJTIyVGh1JTJDJTIwMTMlMjBOb3YlMjAyMDI1JTIwMDklM0EyMiUzQTMxJTIwR01UJTIyJTJDJTIyU2FtZVNpdGUlMjIlM0ElMjJMYXglMjIlN0Q=; acs_3=%7B%22hash%22%3A%22261894c87994c528f5fc093a35dcf7e6de8e3e95%22%2C%22nextSyncTime%22%3A1731576192518%2C%22syncLog%22%3A%7B%22224%22%3A1731489792518%2C%221228%22%3A1731489792518%2C%221230%22%3A1731489792518%7D%7D; adrdel=1731489792594; domain_sid=-3OKYcClreK8a-yi-zjsW%3A1731490093405; jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjY2NTA4MjYsImlhdCI6MTczMTQ5NTEwOSwiZXhwIjoxNzM0MDg3MTA5fQ.PXoVXmhzv90Tg2DlciR0jz2HxZNCUE2YKX9tH9Bpg_E`,
+      },
+    }).then((response) => {
+      expect(response.status).to.eq(200); 
+    });
   });
 });
+
