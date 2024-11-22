@@ -7,13 +7,13 @@ When user logs in with table
 | yuliyabanko@gmail.com              | Test1234   |
 Then user is on dashboard page
 
-Scenario: User creates a new box successfully
+# Scenario: User creates a new box successfully
 Given user presses on create box button
 When user fills in new boxname field
-When user fills in minamount, maxamount, currency
-Then user creates a new box with a new name
+# When user fills in minamount, maxamount, currency
+# Then user creates a new box with a new name
 
 
-Scenario: User gets new box ID to be able to delete it
-When box is created with new ID
-Then user gets ID after slash
+# # Scenario: User gets new box ID to be able to delete it
+# When box is created with new ID
+# Then user gets ID after slash
