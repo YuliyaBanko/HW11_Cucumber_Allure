@@ -57,23 +57,6 @@ Cypress.Commands.add("addParticipant", (inviteLink, email, password, wishes) => 
   cy.clearCookies();
 });
 
-Cypress.Commands.add('createBoxName', (newBoxName) => { 
-  cy.get(boxPage.boxNameField).type(newBoxName);
-  cy.get(boxPage.boxNameField).should('have.value', newBoxName);
-  cy.get(generalElements.arrowRight).click();
-  cy.get(boxPage.sixthIcon).click();
-  cy.get(generalElements.arrowRight).click();
-});
-
-Cypress.Commands.add('createBoxParams', (minAmount, maxAmount, currency) => { 
-  cy.get(boxPage.minAmount).type(minAmount);
-  cy.get(boxPage.maxAmount).type(maxAmount);
-  cy.get(boxPage.currency).select(currency);
-  cy.get(generalElements.arrowRight).click({ force: true });
-  cy.get(generalElements.arrowRight).click({ force: true });
-  cy.get(generalElements.arrowRight).click({ force: true });
-});
-
 Cypress.Commands.add('organizeRaffle', (boxName) => {
   cy.contains('Коробки').click({ force: true });
   cy.contains(boxName).click();
@@ -88,3 +71,16 @@ Cypress.Commands.add('loginAsUser', (user) => {
   cy.login(user.email, user.password);
 });
 
+Cypress.Commands.add('createBox', (boxName, minAmount, maxAmount, currency) => {
+  cy.get(boxPage.boxNameField).type(boxName);
+  cy.get(generalElements.arrowRight).click();
+  cy.get(boxPage.sixthIcon).click();
+  cy.get(generalElements.arrowRight).click();
+  cy.get(boxPage.giftPriceToggle).click({ force: true });
+  cy.get(boxPage.minAmount).type(minAmount);
+  cy.get(boxPage.maxAmount).type(maxAmount);
+  cy.get(boxPage.currency).select(currency);
+  cy.get(generalElements.arrowRight).click({ force: true });
+  cy.get(generalElements.arrowRight).click({ force: true });
+  cy.get(generalElements.arrowRight).click({ force: true });
+});
