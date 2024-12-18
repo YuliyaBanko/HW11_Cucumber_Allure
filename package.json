@@ -4,7 +4,10 @@
   "description": "",
   "main": "cypress.config.js",
   "scripts": {
-    "cy:run": "cypress run"
+    "cy:run": "cypress run",
+     "allure:generate": "allure generate --clean allure-results -o allure-report",
+     "allure:open": "npm run allure:generate && allure open allure-report"
+
   },
   "author": "",
   "license": "ISC",
@@ -14,6 +17,7 @@
     "@faker-js/faker": "^7.6.0"
   },
   "devDependencies": {
-    "cypress": "^13.16.0"
+    "@shelex/cypress-allure-plugin": "^2.40.2",
+    "cypress": "^12.14.0"
   }
 }
