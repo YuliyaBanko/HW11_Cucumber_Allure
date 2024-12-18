@@ -1,0 +1,7 @@
+"DESCRIPTION","DURATION IN MS","NAME","PARENT SUITE","START TIME","STATUS","STOP TIME","SUB SUITE","SUITE","TEST CLASS","TEST METHOD"
+"","8987","User is organizing raffle","","Wed Dec 18 15:55:16 MSK 2024","passed","Wed Dec 18 15:55:25 MSK 2024","","User login on santa website creates a box and holds raffle","",""
+"","9324","User creates a new box successfully","","Wed Dec 18 15:53:36 MSK 2024","passed","Wed Dec 18 15:53:45 MSK 2024","","User login on santa website creates a box and holds raffle","",""
+"","16795","User logs in successfully","","Wed Dec 18 15:53:19 MSK 2024","passed","Wed Dec 18 15:53:36 MSK 2024","","User login on santa website creates a box and holds raffle","",""
+"","369","User gets new box ID to be able to delete it","","Wed Dec 18 15:53:45 MSK 2024","passed","Wed Dec 18 15:53:46 MSK 2024","","User login on santa website creates a box and holds raffle","",""
+"","89774","User invites participants","","Wed Dec 18 15:53:46 MSK 2024","passed","Wed Dec 18 15:55:16 MSK 2024","","User login on santa website creates a box and holds raffle","",""
+"","692","User deletes a created box","","Wed Dec 18 15:55:25 MSK 2024","failed","Wed Dec 18 15:55:26 MSK 2024","","User login on santa website creates a box and holds raffle","",""
